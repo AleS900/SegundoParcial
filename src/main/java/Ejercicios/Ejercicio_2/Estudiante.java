@@ -23,7 +23,7 @@ public class Estudiante extends Colleague{
 
     @Override
     public void messageReceived(String message) {
-        System.out.println("-- INFO - ****Message Received**** -- ALumno: " + std_name
+        System.out.println("-- INFO - ****Message Received**** -- Alumno: " + std_name
         + ", matrícula " + std_matricula + " \n >> " + message);
     }
 

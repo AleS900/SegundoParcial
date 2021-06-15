@@ -36,21 +36,27 @@ public class ChatEducativo implements ICanalDeComunicacion{
     @Override
     public void send(String message, Colleague colleague) {
         Colleague personaParseOrigen = colleague;
-        for (int people_id : list_of_id){
+        for (int people : list_of_id){
             if (personaParseOrigen instanceof Administrativo) {
                 Administrativo administrativo = (Administrativo)personaParseOrigen;
-                if(people_id != administrativo.getAdmin_id()){
-                    people_chat.get(people_id).messageReceived();
+                if(people != administrativo.getAdmin_id()){
+                    people_chat.get(people).messageReceived(message);
                 }
-            } else if (personaParseOrigen instanceof Docente ) {
+            } else if (personaParseOrigen instanceof Docente && (people_chat.get(people) instanceof Docente
+                    || people_chat.get(people) instanceof Estudiante)) {
                 Docente docente = (Docente)personaParseOrigen;
-                if(people_id != docente.getTch_ci()){
-                    people_chat.get(people_id).messageReceived();
+                if(people != docente.getTch_ci()){
+                    people_chat.get(people).messageReceived(message);
                 }
-            } else if (personaParseOrigen instanceof Estudiante){
-                Administrativo administrativo = (Administrativo)personaParseOrigen;
-                if(people_id != administrativo.getAdmin_id()){
-                    people_chat.get(people_id).messageReceived();
+            } else if (personaParseOrigen instanceof Estudiante && (people_chat.get(people) instanceof Docente
+                    || people_chat.get(people) instanceof Administrativo)){
+                Estudiante estudiante = (Estudiante) personaParseOrigen;
+                if(people != estudiante.getStd_matricula() && estudiante.isSend_to_all()){
+                    people_chat.get(people).messageReceived(message);
+                } else if(people != estudiante.getStd_matricula() && estudiante.isSend_to_admi() && people_chat.get(people) instanceof Administrativo){
+                    people_chat.get(people).messageReceived(message);
+                } else  if(people != estudiante.getStd_matricula() && estudiante.isSend_to_teacher()  && people_chat.get(people) instanceof Docente){
+                    people_chat.get(people).messageReceived(message);
                 }
             }
         }
