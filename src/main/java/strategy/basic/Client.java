@@ -13,7 +13,5 @@ public class Client {
 
         context.setStrategy(new ConcreteStrategy3());
         context.execute();
-
-
     }
 }
